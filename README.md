@@ -2,17 +2,6 @@
 
 Semesterprosjekt i DAT160: eit team av Turtlebot3-robotar i Gazebo skal finne fem ArUco-markørar (brann, menneske og stor brann) i ein labyrint på 10 minutt, rapportere posisjonane deira og møtast ved den store brannen.
 
-## Kva som ligg kvar
-
-| Branch | Innhald |
-| --- | --- |
-| `main` | Det felles grunnlaget alle brukar: ROS2-pakken `search_and_rescue_comp_26` med `marker_reporter`. |
-| `thomas` | Thomas si løysing: dekningsplanlegging, A*-navigasjon, mission-leiar og kvit-vegg-deteksjon. Sjå `docs/thomas.md`. |
-| `gunnar` | Gunnar si løysing. Sjå `docs/gunnar.md`. |
-| `oskar` | Oskar si løysing. Sjå `docs/oskar.md`. |
-
-Når gruppa har bestemt seg for kva løysing som skal brukast, vert ho slått saman inn i `main` med ein pull request.
-
 ## Oppsett
 
 Repoet vert klona rett inn i `src` i ROS2-arbeidsområdet:
