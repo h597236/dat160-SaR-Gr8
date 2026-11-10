@@ -24,6 +24,9 @@ setup(
     entry_points={
         'console_scripts': [
             'marker_reporter = search_and_rescue_comp_26.marker_reporter:main',
+            'navigator = search_and_rescue_comp_26.navigator:main',
+            'mission = search_and_rescue_comp_26.mission:main',
+            'wall_colour = search_and_rescue_comp_26.wall_colour:main',
         ],
     },
 )
