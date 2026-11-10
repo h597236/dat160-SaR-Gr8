@@ -3,7 +3,6 @@
 Semesterprosjekt i DAT160: eit team av Turtlebot3-robotar i Gazebo skal finne fem ArUco-markørar (brann, menneske og stor brann) i ein labyrint på 10 minutt, rapportere posisjonane deira og møtast ved den store brannen.
 
 ## Oppsett
-
 Repoet vert klona rett inn i `src` i ROS2-arbeidsområdet:
 
 ```bash
