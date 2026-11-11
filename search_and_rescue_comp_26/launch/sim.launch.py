@@ -25,7 +25,7 @@ def launch_setup(context):
         raise RuntimeError('world must be 1-5 and robots 1-5 (the scoring node only tracks tb3_0 - tb3_4)')
 
     share = get_package_share_directory(challenge_pkg)
-    world_file = os.path.join(share, 'worlds', f'dat160_w{world}.world')
+    world_file = os.path.join(get_package_share_directory('search_and_rescue_comp_26'), 'worlds', f'dat160_w{world}.world')
     map_file = os.path.join(share, 'maps', f'map_dat160_w{world}.yaml')
     rviz_file = os.path.join(get_package_share_directory('search_and_rescue_comp_26'), 'rviz', 'team.rviz')
     use_sim_time = LaunchConfiguration('use_sim_time')
