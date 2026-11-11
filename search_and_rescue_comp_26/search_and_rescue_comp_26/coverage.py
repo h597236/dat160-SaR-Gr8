@@ -32,6 +32,7 @@ class Coverage:
         self.normals = self.wall_normals(cells)
         self.seen = np.zeros(len(cells), dtype=bool)
         self.not_white = np.zeros(len(cells), dtype=bool)
+        self.view_count = np.zeros(len(cells), dtype=int)
 
         step = max(1, int(round(candidate_spacing / planner.res)))
         lattice = np.zeros_like(w)
@@ -97,7 +98,8 @@ class Coverage:
         clear = ~self.p.walls[r, c].any(axis=1)
         return idx[clear]
 
-    def plan_viewpoints(self):
+    def plan_viewpoints(self, remaining_only=False, goal=None):
+        goal = self.goal_coverage if goal is None else goal
         sees = [self.visible(x, y) for x, y in self.candidate_xy]
         coverable = np.zeros(len(self.target_xy), dtype=bool)
         for s in sees:
@@ -105,7 +107,11 @@ class Coverage:
 
         covered = self.seen.copy()
         chosen = []
-        need = self.goal_coverage * coverable.sum()
+        if remaining_only:
+            done = (covered & coverable).sum()
+            need = done + goal * (coverable.sum() - done)
+        else:
+            need = goal * coverable.sum()
         while (covered & coverable).sum() < need:
             gains = [np.count_nonzero(~covered[s]) for s in sees]
             best = int(np.argmax(gains))
@@ -119,10 +125,12 @@ class Coverage:
         self.viewpoint_targets = [sees[i] for i in chosen]
         return self.viewpoints
 
-    def mark_seen(self, x, y, heading):
+    def mark_seen(self, x, y, heading, needed=1):
         near = np.flatnonzero(~self.seen & (np.abs(self.target_xy[:, 0] - x) <= self.max_range)
                               & (np.abs(self.target_xy[:, 1] - y) <= self.max_range))
-        self.seen[self.visible(x, y, heading, near)] = True
+        vis = self.visible(x, y, heading, near)
+        self.view_count[vis] += 1
+        self.seen[vis[self.view_count[vis] >= needed]] = True
 
     def mark_not_white(self, points, radius=0.12):
         for x, y in points:

@@ -586,19 +586,6 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /viewpoints
       Value: true
-    - Class: rviz_default_plugins/Marker
-      Enabled: true
-      Name: Not white walls
-      Namespaces:
-        {}
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /wall_colour_markers
-      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
