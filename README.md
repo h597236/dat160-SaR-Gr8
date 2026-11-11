@@ -17,8 +17,6 @@ source install/setup.bash
 
 Pakken krev kurspakkane `multi_robot_challenge_23`, `ros2_aruco` og `multi_robot_scoring` (med `scoring` og `scoring_interfaces`) i same arbeidsområde.
 
-**Scoring krev ein ekstra plugin i world-filene.** Kopier world-filene frå `multi_robot_scoring/worlds` til `multi_robot_challenge_23/worlds` og bygg `multi_robot_challenge_23` på nytt. Elles finst ikkje `/gazebo/get_entity_state`, og scoring-noden vert ståande og vente.
-
 ## marker_reporter (felles)
 
 `marker_reporter` er den same i alle branchane. Han les ArUco-deteksjonane frå alle robotane, reknar ut posisjonen til kvar markør i kartet og rapporterer kvar ID éin gong til scoring-noden.
