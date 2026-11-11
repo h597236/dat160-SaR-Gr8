@@ -8,7 +8,7 @@ Semesterprosjekt i DAT160: eit team av Turtlebot3-robotar i Gazebo skal finne fe
 | --- | --- |
 | `main` | Det felles grunnlaget alle brukar: ROS2-pakken `search_and_rescue_comp_26` med `marker_reporter`. |
 | `thomas` | Thomas si løysing: dekningsplanlegging, A*-navigasjon, mission-leiar og kvit-vegg-deteksjon. Sjå `docs/thomas.md`. |
-| `gunnar` | Gunnar si løysing. Sjå `docs/gunnar.md`. |
+| `gunnar` | Gunnar si løysing. Minimal planlegging, wallfollower på alle vegger. Sjå `docs/gunnar.md`. |
 | `oskar` | Oskar si løysing. Sjå `docs/oskar.md`. |
 
 Når gruppa har bestemt seg for kva løysing som skal brukast, vert ho slått saman inn i `main` med ein pull request.
