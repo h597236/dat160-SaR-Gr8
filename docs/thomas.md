@@ -16,7 +16,7 @@ Robotane reknar ut frå blueprint-kartet kvar dei må stå for at kameraet skal 
 
 ```bash
 ros2 launch search_and_rescue_comp_26 sim.launch.py world:=1
-ros2 launch search_and_rescue_comp_26 team.launch.py
+ros2 launch sar_team team.launch.py speed:=0.4 use_wall_colour:=true 2>&1 | grep --line-buffered "marker_reporter\|mission\]\|Score\|wall_colour"
 ```
 
 `team.launch.py` startar òg scoring-noden. Robotane reknar ut planen og ventar til scoring køyrer, sidan scoring-klokka startar med ein gong når det er fleire enn 2 robotar.
