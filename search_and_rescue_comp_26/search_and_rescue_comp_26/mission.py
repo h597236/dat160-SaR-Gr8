@@ -304,7 +304,7 @@ class Mission(Node):
                 self.finish_viewpoint(r)
             elif r.nav == "reached":
                 vx, vy = cov.viewpoints[r.vp]
-                r.headings = cov.headings_for(vx, vy, cov.scan_targets(r.vp, True))
+                r.headings = cov.headings_for(vx, vy, cov.viewpoint_targets[r.vp])
                 self.set_state(r, "scan")
                 self.next_heading(r)
             elif r.nav == "failed":
@@ -338,7 +338,7 @@ class Mission(Node):
         if missing and not busy and self.passes < 2:
             self.passes += 1
             self.get_logger().info(f"Still missing {sorted(missing)}, looking at all walls again")
-            self.coverage.seen[:] = self.coverage.not_white
+            self.coverage.seen[:] = False
             self.coverage.view_count[:] = 0
             self.coverage.plan_viewpoints(remaining_only=True, goal=1.0)
             self.vp_done = set()
