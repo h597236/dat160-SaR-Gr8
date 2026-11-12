@@ -32,7 +32,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('robots', default_value='4'),
         DeclareLaunchArgument('mission', default_value='true'),
-        DeclareLaunchArgument('scoring', default_value='true'),
+        DeclareLaunchArgument('scoring', default_value='false'),
         DeclareLaunchArgument('use_wall_check', default_value='true'),
         DeclareLaunchArgument('speed', default_value='0.26'),
         OpaqueFunction(function=launch_setup),
