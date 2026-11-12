@@ -31,7 +31,6 @@ class Coverage:
         self.target_xy = np.array([planner.to_world(r, c) for r, c in cells])
         self.normals = self.wall_normals(cells)
         self.seen = np.zeros(len(cells), dtype=bool)
-        self.not_white = np.zeros(len(cells), dtype=bool)
         self.view_count = np.zeros(len(cells), dtype=int)
 
         step = max(1, int(round(candidate_spacing / planner.res)))
@@ -132,16 +131,6 @@ class Coverage:
         self.view_count[vis] += 1
         self.seen[vis[self.view_count[vis] >= needed]] = True
 
-    def mark_not_white(self, points, radius=0.12):
-        for x, y in points:
-            near = np.hypot(self.target_xy[:, 0] - x, self.target_xy[:, 1] - y) <= radius
-            self.seen[near] = True
-            self.not_white[near] = True
-
-    def scan_targets(self, i, everything):
-        t = self.viewpoint_targets[i]
-        return t[~self.not_white[t]] if everything else t[~self.seen[t]]
-
     def remaining(self, i):
         t = self.viewpoint_targets[i]
         return t[~self.seen[t]]
@@ -164,6 +153,3 @@ class Coverage:
             mid = (first + ordered[i - 1]) / 2
             headings.append(math.atan2(math.sin(mid), math.cos(mid)))
         return headings
-
-    def coverage_fraction(self):
-        return (self.seen & self.coverable).sum() / max(1, self.coverable.sum())
