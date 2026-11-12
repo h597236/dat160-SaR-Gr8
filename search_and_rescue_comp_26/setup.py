@@ -17,7 +17,7 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='DAT160 gruppe 8',
+    maintainer='DAT160 group',
     maintainer_email='todo@todo.todo',
     description='Search and rescue robot team for the DAT160 semester project',
     license='TODO',
@@ -25,6 +25,9 @@ setup(
     entry_points={
         'console_scripts': [
             'marker_reporter = search_and_rescue_comp_26.marker_reporter:main',
+            'navigator = search_and_rescue_comp_26.navigator:main',
+            'mission = search_and_rescue_comp_26.mission:main',
+            'wall_check = search_and_rescue_comp_26.wall_check:main',
         ],
     },
 )

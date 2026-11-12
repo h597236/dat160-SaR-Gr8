@@ -4,15 +4,26 @@
   <name>search_and_rescue_comp_26</name>
   <version>0.0.0</version>
   <description>Search and rescue robot team for the DAT160 semester project</description>
-  <maintainer email="todo@todo.todo">DAT160 gruppe 8</maintainer>
+  <maintainer email="todo@todo.todo">DAT160 group</maintainer>
   <license>TODO</license>
 
   <exec_depend>rclpy</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>visualization_msgs</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-opencv</exec_depend>
+  <exec_depend>ros2_aruco</exec_depend>
   <exec_depend>ros2_aruco_interfaces</exec_depend>
+  <exec_depend>scoring</exec_depend>
   <exec_depend>scoring_interfaces</exec_depend>
+  <exec_depend>multi_robot_challenge_23</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
