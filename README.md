@@ -1,26 +1,26 @@
-# DAT160 Search & Rescue – gruppe 8
+# DAT160 Search & Rescue – group 8
 
-Semesterprosjekt i DAT160: eit team av Turtlebot3-robotar i Gazebo skal finne fem ArUco-markørar (brann, menneske og stor brann) i ein labyrint på 10 minutt, rapportere posisjonane deira og møtast ved den store brannen.
+Semester project in DAT160: a team of Turtlebot3 robots in Gazebo has to find five ArUco markers (fires, a human and a big fire) in a maze within 10 minutes, report their positions and meet at the big fire.
 
-Robotane reknar ut frå blueprint-kartet kvar dei må stå for at kameraet skal sjå alle veggane, fordeler punkta mellom seg og køyrer dit med A*. Ein leiarnode (`mission`) styrer kva kvar robot gjer, og stoppar alt når alle fem markørane er rapporterte og to robotar har vore ved den store brannen.
+The robots use the blueprint map to work out where they need to stand for the camera to see every wall, split those points between them and drive there with A*. A leader node (`mission`) decides what each robot does, and stops everything once all five markers are reported and two robots have been at the big fire.
 
-## Krav
+## Requirements
 
-ROS2 Foxy på Ubuntu 20.04, med Gazebo og Turtlebot3.
+ROS2 Foxy on Ubuntu 20.04, with Gazebo and Turtlebot3.
 
-Desse kurspakkane må liggje i same arbeidsområde (`~/ros2_ws/src`):
+These course packages must be in the same workspace (`~/ros2_ws/src`):
 
-| Pakke | Kva me brukar frå ho |
+| Package | What we use from it |
 | --- | --- |
-| `multi_robot_challenge_23` | Blueprint-karta (`maps/`) og robotmodellen (`urdf/`) |
-| `ros2_aruco` og `ros2_aruco_interfaces` | `aruco_node` og meldingstypen `ArucoMarkers` |
-| `multi_robot_scoring` (`scoring` og `scoring_interfaces`) | Servicetypen `SetMarkerPosition`, og scoring-noden når han vert starta med `scoring:=true` |
+| `multi_robot_challenge_23` | The blueprint maps (`maps/`) and the robot model (`urdf/`) |
+| `ros2_aruco` and `ros2_aruco_interfaces` | `aruco_node` and the `ArucoMarkers` message type |
+| `multi_robot_scoring` (`scoring` and `scoring_interfaces`) | The `SetMarkerPosition` service type, and the scoring node when started with `scoring:=true` |
 
-`scoring_interfaces` må alltid vere bygd, sidan nodane våre brukar servicetypen. Sjølve scoring-noden treng berre vere der viss de startar han sjølve.
+`scoring_interfaces` must always be built, since our nodes use the service type. The scoring node itself is only needed if you start it yourself.
 
-I tillegg trengst `nav2_map_server`, `nav2_lifecycle_manager`, `cv_bridge`, `python3-opencv` og `python3-numpy`.
+You also need `nav2_map_server`, `nav2_lifecycle_manager`, `cv_bridge`, `python3-opencv` and `python3-numpy`.
 
-## Oppsett
+## Setup
 
 ```bash
 cd ~/ros2_ws/src
@@ -30,63 +30,63 @@ colcon build --packages-select scoring_interfaces scoring search_and_rescue_comp
 source install/setup.bash
 ```
 
-World-filene ligg i pakken vår (`worlds/`). Dei har pluginen `libgazebo_ros_state.so`, som scoring treng for å sjå kvar robotane er.
+The world files are in our package (`worlds/`). They include the `libgazebo_ros_state.so` plugin, which scoring needs to see where the robots are.
 
-## Køyre
+## Running
 
-Terminal 1, start simuleringa (byt `x` med kart 1–5):
+Terminal 1, start the simulation (replace `x` with map 1–5):
 
 ```bash
 ros2 launch search_and_rescue_comp_26 sim.launch.py world:=x
 ```
 
-Terminal 2, start robotteamet:
+Terminal 2, start the robot team:
 
 ```bash
 ros2 launch search_and_rescue_comp_26 team.launch.py speed:=0.4
 ```
 
-Scoring-noden er av som standard, sidan han vanlegvis vert starta separat (til dømes av læraren). For å starte han saman med teamet når de testar:
+The scoring node is off by default, since it is usually started separately (for example by the teacher). To start it together with the team for testing:
 
 ```bash
 ros2 launch search_and_rescue_comp_26 team.launch.py speed:=0.4 scoring:=true
 ```
 
-Robotane ventar til `/set_marker_position` finst før dei køyrer. Utan ein scoring-node står dei altså stille.
+The robots wait until `/set_marker_position` is available before they move, so without a scoring node they stand still.
 
-| Argument | Standard | Kva |
+| Argument | Default | What |
 | --- | --- | --- |
-| `world` (sim) | `1` | Kart 1–5 |
-| `robots` (sim og team) | `4` | Tal robotar, 1–5, same tal i begge |
-| `speed` (team) | `0.26` | Fart fram (m/s) |
-| `scoring` (team) | `false` | Start scoring-noden saman med teamet |
-| `use_wall_check` (team) | `true` | Hopp raskare over vegger som ikkje er kvite når roboten scannar |
-| `mission` (team) | `true` | `false` = berre navigator og reporter, for å sende mål for hand |
+| `world` (sim) | `1` | Map 1–5 |
+| `robots` (sim and team) | `4` | Number of robots, 1–5, same number in both |
+| `speed` (team) | `0.26` | Forward speed (m/s) |
+| `scoring` (team) | `false` | Start the scoring node together with the team |
+| `use_wall_check` (team) | `true` | Skip non-white walls faster while scanning |
+| `mission` (team) | `true` | `false` = only navigator and reporter, for sending goals by hand |
 
-## Nodar
+## Nodes
 
-| Fil | Kva ho gjer |
+| File | What it does |
 | --- | --- |
-| `navigator.py` | Éin per robot. Planlegg veg med A* på kartet og køyrer langs han. Einaste noden som sender `cmd_vel`. |
-| `coverage.py` | Ikkje ein node. Finn punkta som til saman ser alle veggane (grådig set cover). |
-| `mission.py` | Leiaren. Tilstandsmaskin per robot: `explore`, `to_vp`, `scan`, `inspect`, `approach`, `go_big_fire`, `wait_big_fire`, `done`. |
-| `marker_reporter.py` | Reknar ut kvar markørane er i kartet og rapporterer kvar ID éin gong til scoring. |
-| `wall_check.py` | Ser med HSV om veggen rett framfor er kvit eller ikkje. |
+| `navigator.py` | One per robot. Plans a path with A* on the map and follows it. The only node that publishes `cmd_vel`. |
+| `coverage.py` | Not a node. Finds the points that together see every wall (greedy set cover). |
+| `mission.py` | The leader. One state machine per robot: `explore`, `to_vp`, `scan`, `inspect`, `approach`, `go_big_fire`, `wait_big_fire`, `done`. |
+| `marker_reporter.py` | Works out where the markers are in the map and reports each ID once to scoring. |
+| `wall_check.py` | Uses HSV to check whether the wall straight ahead is white or not. |
 
 ### marker_reporter
 
-- Les `/<robot>/aruco_markers` direkte og slår opp TF **på tidspunktet biletet vart teke**. Kursnoden `marker_recognition` brukar posisjonen roboten har *no*, og det gir feil posisjon når roboten bevegar seg.
-- Brukar berre målingar innanfor 3,0 m og 65° synsvinkel. Grensene kjem frå testane våre av ArUco-deteksjonen.
-- Tek snittet av 5 målingar og rapporterer med z = 0, sidan scoringa samanliknar i 3D mot z = 0.
-- Vert same ID avvist 3 gonger, vert ho rekna som allereie rapportert (til dømes etter at noden er starta på nytt).
+- Reads `/<robot>/aruco_markers` directly and looks up TF **at the time the image was taken**. The course node `marker_recognition` uses where the robot is *now*, which gives the wrong position when the robot is moving.
+- Only uses detections within 3.0 m and 65° viewing angle. The limits come from our tests of the ArUco detection.
+- Averages 5 detections and reports with z = 0, since scoring compares in 3D against z = 0.
+- If the same ID is rejected 3 times, it is treated as already reported (for example after the node has been restarted).
 
-| Topic | Type | Retning | Innhald |
+| Topic | Type | Direction | Content |
 | --- | --- | --- | --- |
-| `/<robot>/aruco_markers` | `ros2_aruco_interfaces/ArucoMarkers` | inn | Markørar i kamerabiletet |
-| `/set_marker_position` | `scoring_interfaces/SetMarkerPosition` | service, ut | Rapport til scoring |
-| `/reported_markers` | `std_msgs/Int8MultiArray` | ut, kvart sekund | ID-ar scoringa har godteke |
-| `/big_fire_position` | `geometry_msgs/Point` | ut, kvart sekund | Posisjonen til ID 4 når han er godteken |
+| `/<robot>/aruco_markers` | `ros2_aruco_interfaces/ArucoMarkers` | in | Markers in the camera image |
+| `/set_marker_position` | `scoring_interfaces/SetMarkerPosition` | service, out | Report to scoring |
+| `/reported_markers` | `std_msgs/Int8MultiArray` | out, every second | IDs accepted by scoring |
+| `/big_fire_position` | `geometry_msgs/Point` | out, every second | Position of ID 4 once accepted |
 
 ## RViz
 
-`sim.launch.py` opnar RViz med `rviz/team.rviz`. Der ser du vegen til kvar robot og dekningspunkta (blå = att, grå = ferdig).
+`sim.launch.py` opens RViz with `rviz/team.rviz`. It shows each robot's path and the coverage points (blue = remaining, grey = done).
